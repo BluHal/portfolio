@@ -2,7 +2,7 @@
 </script>
 
 <div class="w-full p-[2px] task-bar bg-windows-grey fixed bottom-0 left-0 right-0 z-50">
-	<button class="start-button-wrapper">
+	<button class="start-button-wrapper" aria-label="Start">
 		<div
 			class="bg-no-repeat w-[45px] h-[14px]"
 			style="background-image: url(/icons/start-button.png);"

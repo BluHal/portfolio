@@ -1,0 +1,9 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(npm install *)",
+			"Bash(node -e \"const s = require\\('./node_modules/svelte/package.json'\\); console.log\\(s.version\\)\")",
+			"Bash(npm run *)"
+		]
+	}
+}

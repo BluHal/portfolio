@@ -66,6 +66,7 @@
 >
 	<header
 		role="toolbar"
+		tabindex="0"
 		aria-label="Window controls"
 		class="block h-[25px] relative text-left text-white bg-windows-blue px-3 py-1 pr-1 window-header line-h {fullscreen
 			? ''
@@ -88,7 +89,10 @@
 			<img class="absolute left-[1px] top-0" src="/icons/minimize-icon.png" alt="" />
 		</button>
 	</header>
-	<svelte:component this={content} />
+	{#if content}
+		{@const DynamicComponent = content}
+		<DynamicComponent />
+	{/if}
 </div>
 
 <svelte:window onmouseup={onMouseUp} onmousemove={onMouseMove} />
