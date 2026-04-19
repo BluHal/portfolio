@@ -1,18 +1,19 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import Window from '../components/Window.svelte';
 	import MonitorSettings from './MonitorSettings.svelte';
 	import MyWebSite from './MyWebSite.svelte';
 	import Projects from './Projects.svelte';
 
-	let showWindow = false;
-	let x = 0;
-	let y = 0;
-	let currentContent: any = null;
-	let windowTitle: string = '';
-	let fullscreen = false;
+	let showWindow = $state(false);
+	let x = $state(0);
+	let y = $state(0);
+	let currentContent = $state<Component | null>(null);
+	let windowTitle = $state('');
+	let fullscreen = $state(false);
 
-	function openWindow(event: any, content: any, title: string, openFullScreen: boolean) {
-		const rect = event.target.getBoundingClientRect();
+	function openWindow(event: MouseEvent, content: Component, title: string, openFullScreen: boolean) {
+		const rect = (event.target as HTMLElement).getBoundingClientRect();
 		x = rect.left + rect.width / 2;
 		y = rect.top + rect.height / 2;
 		currentContent = content;
@@ -31,7 +32,8 @@
 	<div class="text-justify align-top w-20 h-12 leading-3 m-0 py-2 px-[1px]">
 		<button
 			class="relative cursor-pointer"
-			on:click={(e) => openWindow(e, MyWebSite, 'My Web Site', true)}
+			aria-label="Open About Me"
+			onclick={(e) => openWindow(e, MyWebSite, 'My Web Site', true)}
 		>
 			<img class="w-8 h-8" src="/icons/ie.png" alt="" />
 			<span class="text-[8px] text-white">About Me</span>
@@ -40,14 +42,19 @@
 	<div class="text-justify align-top w-20 h-12 leading-3 m-0 py-2 px-[1px]">
 		<button
 			class="relative cursor-pointer"
-			on:click={(e) => openWindow(e, Projects, 'My Projects', false)}
+			aria-label="Open Projects"
+			onclick={(e) => openWindow(e, Projects, 'My Projects', false)}
 		>
 			<img class="w-8 h-8" src="/icons/folder.png" alt="" />
 			<span class="text-[8px] text-white">Projects</span>
 		</button>
 	</div>
 	<div class="text-justify align-top w-20 h-12 leading-3 m-0 py-2 px-[1px]">
-		<button class="relative cursor-pointer">
+		<button
+			class="relative cursor-pointer"
+			aria-label="Open Settings"
+			onclick={(e) => openWindow(e, MonitorSettings, 'Display Properties', false)}
+		>
 			<img class="w-8 h-8" src="/icons/monitor_gear.png" alt="" />
 			<span class="text-[8px] text-white">Settings</span>
 		</button>
@@ -63,4 +70,3 @@
 	{x}
 	{y}
 />
-<!-- <MonitorSettings show={showWindow} close={closeWindow} content={currentContent} title={windowTitle} /> -->
