@@ -31,6 +31,7 @@
 					aria-pressed={themeState.wallpaper === wp.type}
 					onclick={() => {
 						themeState.wallpaper = wp.type;
+						urlInput = '';
 					}}
 				></button>
 			{/each}
