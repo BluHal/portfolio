@@ -1,18 +1,32 @@
 <script lang="ts">
-	import type { SvelteComponent } from 'svelte';
+	import type { Component } from 'svelte';
+	import { WINDOW_DEFAULTS } from '$lib/constants.js';
 
-	export let title = '';
-	export let show = false;
-	export let close = () => {};
-	export let minimize = () => {};
-	export let content: typeof SvelteComponent | null = null;
-	export let x = 0;
-	export let y = 0;
-	export let fullscreen = false;
+	interface Props {
+		title?: string;
+		show?: boolean;
+		close?: () => void;
+		minimize?: () => void;
+		content?: Component | null;
+		x?: number;
+		y?: number;
+		fullscreen?: boolean;
+	}
 
-	let moving = false;
-	let left = 400;
-	let top = 150;
+	let {
+		title = '',
+		show = false,
+		close = () => {},
+		minimize = () => {},
+		content = null,
+		x = 0,
+		y = 0,
+		fullscreen = false
+	}: Props = $props();
+
+	let moving = $state(false);
+	let left = $state(WINDOW_DEFAULTS.left);
+	let top = $state(WINDOW_DEFAULTS.top);
 
 	function onMouseDown() {
 		if (fullscreen) return;
@@ -29,40 +43,49 @@
 	function onMouseUp() {
 		moving = false;
 	}
+
+	function handleClose() {
+		left = WINDOW_DEFAULTS.left;
+		top = WINDOW_DEFAULTS.top;
+		close();
+	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+	role="dialog"
+	aria-label={title}
+	aria-hidden={!show}
+	inert={!show}
 	style="left: {fullscreen ? '0px' : `${left}px`}; top: {fullscreen
 		? '0px'
-		: `${top}px`}; --modal-x: calc({x}px - 400px); --modal-y: calc({y}px - 150px);"
+		: `${top}px`}; --modal-x: calc({x}px - {WINDOW_DEFAULTS.left}px); --modal-y: calc({y}px - {WINDOW_DEFAULTS.top}px);"
 	class="draggable bg-windows-grey {fullscreen
 		? 'w-full h-[calc(100%-27px)]'
 		: 'w-[700px] h-[500px]'} window modal-content"
 	class:open={show}
 >
 	<header
+		role="toolbar"
+		aria-label="Window controls"
 		class="block h-[25px] relative text-left text-white bg-windows-blue px-3 py-1 pr-1 window-header line-h {fullscreen
 			? ''
 			: 'cursor-move'} mx-[3px] mt-[2px]"
-		on:mouseup={onMouseUp}
-		on:mousemove={onMouseMove}
-		on:mousedown={onMouseDown}
+		onmouseup={onMouseUp}
+		onmousemove={onMouseMove}
+		onmousedown={onMouseDown}
 	>
 		<span>{title}</span>
 		<button
 			class="window-button block relative font-bold text-black bg-[silver] float-right h-4 w-4 z-20 p-0"
-			on:click={() => {
-				left = 400;
-				top = 150;
-				close();
-			}}
+			aria-label="Close"
+			onclick={handleClose}
 		>
 			<img class="absolute left-[1px] top-0" src="/icons/close-icon.png" alt="" />
 		</button>
 		<button
 			class="window-button block relative font-bold text-black bg-[silver] float-right h-4 w-4 z-20 p-0 mr-1"
-			on:click={minimize}
+			aria-label="Minimize"
+			onclick={minimize}
 		>
 			<img class="absolute left-[1px] top-0" src="/icons/minimize-icon.png" alt="" />
 		</button>
@@ -70,11 +93,10 @@
 	<svelte:component this={content} />
 </div>
 
-<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
+<svelte:window onmouseup={onMouseUp} onmousemove={onMouseMove} />
 
 <style>
 	.modal-content {
-		transition: opacity 0.3s ease-in-out;
 		opacity: 0;
 		transform-origin: var(--modal-x) var(--modal-y);
 		transform: scale(0);
