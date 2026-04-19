@@ -70,8 +70,6 @@
 		class="block h-[25px] relative text-left text-white bg-windows-blue px-3 py-1 pr-1 window-header line-h {fullscreen
 			? ''
 			: 'cursor-move'} mx-[3px] mt-[2px]"
-		onmouseup={onMouseUp}
-		onmousemove={onMouseMove}
 		onmousedown={onMouseDown}
 	>
 		<span>{title}</span>
