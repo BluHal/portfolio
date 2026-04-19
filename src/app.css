@@ -9,11 +9,22 @@
 	font-style: normal;
 }
 
+:root {
+	--win-grey: #c6c6c6;
+	--win-blue: #000080;
+	--win-dark-grey: #404040;
+}
+
+[data-theme='dark'] {
+	--win-grey: #2d2d2d;
+	--win-blue: #4a0080;
+	--win-dark-grey: #888888;
+}
+
 body {
 	font-family: 'px_sans_nouveaux', sans-serif;
 	font-weight: 400;
 	font-style: normal;
-
 	width: 100dvw;
 	height: 100dvh;
 	overflow: hidden;
@@ -45,7 +56,6 @@ body {
 	border-left: 1px solid silver;
 	border-right: 2px solid silver;
 	border-bottom: 1px solid silver;
-	line-height: 1.4;
 }
 
 .window-content-wrapper {
