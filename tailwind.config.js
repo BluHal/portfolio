@@ -4,9 +4,9 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				'windows-grey': '#c6c6c6',
-				'windows-dark-grey': '#404040',
-				'windows-blue': '#000080;'
+				'windows-grey': 'var(--win-grey)',
+				'windows-dark-grey': 'var(--win-dark-grey)',
+				'windows-blue': 'var(--win-blue)'
 			}
 		}
 	},
