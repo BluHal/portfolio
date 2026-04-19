@@ -1,59 +1,75 @@
 <script lang="ts">
-	export let title = 'Display Properties';
-	export let show = false;
-	export let close = () => {};
-	export let minimize = () => {};
+	import { themeState, getWallpaperStyle, type WallpaperType } from '$lib/theme.svelte.js';
 
-	let moving = false;
-	let left = 400;
-	let top = 150;
+	const wallpapers: { type: WallpaperType; label: string }[] = [
+		{ type: 'teal', label: 'Teal' },
+		{ type: 'dots', label: 'Dots' },
+		{ type: 'bricks', label: 'Bricks' },
+		{ type: 'plaid', label: 'Plaid' },
+		{ type: 'waves', label: 'Waves' }
+	];
 
-	function onMouseDown() {
-		moving = true;
-	}
+	let urlInput = $state(themeState.wallpaperUrl);
 
-	function onMouseMove(e: MouseEvent) {
-		if (moving) {
-			left += e.movementX;
-			top += e.movementY;
-		}
-	}
-
-	function onMouseUp() {
-		moving = false;
+	function applyUrl() {
+		themeState.wallpaper = 'custom';
+		themeState.wallpaperUrl = urlInput;
 	}
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-{#if show}
-	<div
-		style="left: {left}px; top: {top}px;"
-		class="draggable bg-windows-grey w-[700px] h-[500px] window"
-	>
-		<header
-			class="block h-[25px] relative text-left text-white bg-windows-blue px-3 py-1 pr-1 window-header line-h cursor-move mx-[3px] mt-[2px]"
-			on:mouseup={onMouseUp}
-			on:mousemove={onMouseMove}
-			on:mousedown={onMouseDown}
-		>
-			<span>{title}</span>
+<div class="p-3 h-full overflow-auto bg-windows-grey text-xs">
+	<section>
+		<p class="font-bold mb-2">Background</p>
+		<div class="flex gap-2 flex-wrap mb-2">
+			{#each wallpapers as wp}
+				<button
+					style={getWallpaperStyle(wp.type, '')}
+					class="w-12 h-10 border-2 {themeState.wallpaper === wp.type
+						? 'border-windows-blue'
+						: 'border-windows-dark-grey'}"
+					aria-label={wp.label}
+					aria-pressed={themeState.wallpaper === wp.type}
+					onclick={() => {
+						themeState.wallpaper = wp.type;
+					}}
+				></button>
+			{/each}
+		</div>
+		<div class="flex gap-1 mt-1">
+			<input
+				type="url"
+				placeholder="Wallpaper URL..."
+				bind:value={urlInput}
+				class="border border-windows-dark-grey px-1 py-0.5 flex-1 bg-white text-black"
+				aria-label="Custom wallpaper URL"
+			/>
+			<button class="window-button px-2 py-0.5" onclick={applyUrl}>Apply</button>
+		</div>
+	</section>
+
+	<hr class="my-3 border-windows-dark-grey" />
+
+	<section>
+		<p class="font-bold mb-2">Appearance</p>
+		<div class="flex gap-2">
 			<button
-				class="window-button block relative font-bold text-black bg-[silver] float-right h-4 w-4 z-20 p-0"
-				on:click={close}
+				class="window-button px-3 py-1 {themeState.theme === 'classic' ? 'font-bold' : ''}"
+				aria-pressed={themeState.theme === 'classic'}
+				onclick={() => {
+					themeState.theme = 'classic';
+				}}
 			>
-				<img class="absolute left-[1px] top-0" src="/icons/close-icon.png" alt="" />
+				Classic
 			</button>
 			<button
-				class="window-button block relative font-bold text-black bg-[silver] float-right h-4 w-4 z-20 p-0 mr-1"
-				on:click={minimize}
+				class="window-button px-3 py-1 {themeState.theme === 'dark' ? 'font-bold' : ''}"
+				aria-pressed={themeState.theme === 'dark'}
+				onclick={() => {
+					themeState.theme = 'dark';
+				}}
 			>
-				<img class="absolute left-[1px] top-0" src="/icons/minimize-icon.png" alt="" />
+				Dark
 			</button>
-		</header>
-	</div>
-{/if}
-
-<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
-
-<style>
-</style>
+		</div>
+	</section>
+</div>
