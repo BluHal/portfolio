@@ -90,6 +90,14 @@
 			tags: ['SvelteKit', 'TypeScript']
 		},
 		{
+			name: 'Pokémon Katakana',
+			url: 'https://pokemon-katakana.vercel.app',
+			description:
+				'Learn katakana through Pokémon trading cards. Answer correctly to collect cards and build your deck — making Japanese study addictive.',
+			year: '2025',
+			tags: ['SvelteKit', 'TypeScript', 'Japanese']
+		},
+		{
 			name: 'This Portfolio',
 			url: '#',
 			description:
