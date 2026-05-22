@@ -5,6 +5,14 @@
 		name: string;
 		pct: number;
 	}
+	interface Project {
+		name: string;
+		url: string;
+		description: string;
+		year: string;
+		tags: string[];
+		icon?: string;
+	}
 	interface SkillCat {
 		id: string;
 		label: string;
@@ -80,7 +88,7 @@
 		}
 	];
 
-	const projects = [
+	const projects: Project[] = [
 		{
 			name: 'City Pop Cafe',
 			url: 'https://city-pop-cafe.vercel.app/',
@@ -95,7 +103,8 @@
 			description:
 				'Learn katakana through Pokémon trading cards. Answer correctly to collect cards and build your deck — making Japanese study addictive.',
 			year: '2025',
-			tags: ['SvelteKit', 'TypeScript', 'Japanese']
+			tags: ['SvelteKit', 'TypeScript', 'Japanese'],
+			icon: `<svg width="64" height="64" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="14" r="13" stroke="#FFCB05" stroke-width="1.5"/><path d="M1 14 Q1 1 14 1 Q27 1 27 14Z" fill="#ff6b9d"/><path d="M1 14 Q1 27 14 27 Q27 27 27 14Z" fill="#c77dff"/><line x1="1" y1="14" x2="27" y2="14" stroke="#FFCB05" stroke-width="1.5"/><circle cx="14" cy="14" r="4" fill="#1a1a2e" stroke="#FFCB05" stroke-width="1.5"/><circle cx="14" cy="14" r="2" fill="#FFCB05"/></svg>`
 		},
 		{
 			name: 'This Portfolio',
@@ -491,7 +500,11 @@
 								<span class="n">{project.name}</span>
 								<span class="yr">© {project.year}</span>
 							</div>
+							{#if project.icon}
+							<div class="thumb thumb-icon">{@html project.icon}</div>
+						{:else}
 							<div class="thumb">{project.name}</div>
+						{/if}
 							<div class="desc">{project.description}</div>
 							<div class="proj-meta">
 								<span class="tags">
@@ -1571,6 +1584,16 @@
 		letter-spacing: 0.15em;
 		color: #28304a;
 		position: relative;
+	}
+	.proj .thumb.thumb-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #1a1a2e;
+	}
+	.proj .thumb.thumb-icon::before,
+	.proj .thumb.thumb-icon::after {
+		display: none;
 	}
 	.proj .thumb::before {
 		content: '';
